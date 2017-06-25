@@ -5,7 +5,7 @@ class CreateSpreeEbayProducts < ActiveRecord::Migration[5.0]
       t.integer :ebay_store_id, null: false
       t.string :ebay_id
       t.datetime :listed_at
-      t.text :custom_description
+      t.text :custom_fields # A JSON string contains custom fields
 
       t.timestamps
     end
@@ -18,8 +18,8 @@ class CreateSpreeEbayProducts < ActiveRecord::Migration[5.0]
                     column: :ebay_store_id,
                     name: :fw_ebay_products_ebay_store_id
 
-    add_index :spree_ebay_products, [:ebay_id],
-              name: :index_ebay_products_on_ebay_id_unique,
+    add_index :spree_ebay_products, [:product_id, :ebay_store_id],
+              name: :idx_ebay_products_on_product_ebay_store_id_uniq,
               unique: true
   end
 end

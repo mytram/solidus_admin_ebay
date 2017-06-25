@@ -1,0 +1,53 @@
+<% admin_layout "full-width" %>
+
+<% admin_breadcrumb(plural_resource_name(Spree::EbayStore)) %>
+
+<% content_for :page_actions do %>
+  <li id="new_ebay_store_link">
+    <%= button_link_to Spree.t(:new_ebay_store), new_object_url %>
+  </li>
+<% end if can?(:create, Spree::EbayStore) %>
+
+
+<% content_for :table_filter_title do %>
+  <%= Spree.t(:search) %>
+<% end %>
+
+<% if @collection.any? %>
+  <table class="index" id="listing_ebay_stores">
+    <colgroup>
+      <col style="width: 33%;">
+      <col style="width: 33%;">
+      <col style="width: 15%;">
+      <col style="width: 19%;">
+    </colgroup>
+    <thead>
+      <tr data-hook="admin_ebay_stores_index_headers">
+        <th><%= Spree::EbayStore.human_attribute_name(:name) %></th>
+        <th><%= Spree::EbayStore.human_attribute_name(:url) %></th>
+        <th><%= Spree::EbayStore.human_attribute_name(:code) %></th>
+        <th data-hook="admin_ebay_stores_index_header_actions" class="actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @collection.each do |ebay_store| %>
+        <tr id="<%= spree_dom_id ebay_store %>" data-hook="admin_ebay_stores_index_rows" class="<%= cycle('odd', 'even') %>">
+          <td><%= link_to ebay_store.name, edit_admin_ebay_store_path(ebay_store) %></td>
+          <td class="align-center"><%= link_to ebay_store.url, ebay_store.url, target: '_blank' %></td>
+          <td class="align-center"><%= ebay_store.code %></td>
+          <td class="actions" data-hook="admin_ebay_stores_index_row_actions">
+            <%= link_to_edit ebay_store, no_text: true, class: 'edit' if can?(:edit, ebay_store) %>
+            &nbsp;
+            <%= link_to_delete ebay_store, no_text: true if can?(:delete, ebay_store)%>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="col-9 no-objects-found">
+    <%= render 'spree/admin/shared/no_objects_found',
+    resource: Spree::EbayStore,
+    new_resource_url: new_object_url %>
+  </div>
+<% end %>

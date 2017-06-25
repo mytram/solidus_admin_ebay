@@ -1,0 +1,20 @@
+<% content_for :page_actions do %>
+  <% if can?(:create, Spree::EbayStore) %>
+    <li id="new_ebay_store_link">
+      <%= button_link_to Spree.t(:new_ebay_store), new_object_url, { id: 'admin_new_ebay_store' } %>
+    </li>
+  <% end %>
+<% end %>
+
+<%= render partial: 'spree/shared/error_messages', locals: { target: @ebay_store } %>
+
+<% admin_breadcrumb(Spree.t(:ebay_store_details)) %>
+
+<%= form_for [:admin, @ebay_store], html: { multipart: true } do |f| %>
+  <fieldset class="no-border-top">
+    <%= render partial: 'form', locals: { f: f } %>
+    <% if can?(:update, @ebay_store) %>
+      <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+    <% end %>
+  </fieldset>
+<% end %>

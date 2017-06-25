@@ -1,0 +1,13 @@
+<%= form_tag admin_ebay_products_all_path, method: :post, :html => { :multipart => true } do %>
+  <fieldset data-hook="new_product">
+    <legend align="center"><%= Spree.t(:add_all_products_to_ebay_store) %></legend>
+
+    <%= label_tag :ebay_store_id, Spree::EbayStore.model_name.human, class: 'required' %>
+    <%= collection_select('', :ebay_store_id, @ebay_stores, :id, :name, { :include_blank => Spree.t('match_choices.none') }, { :class => 'select2 fullwidth' }) %>
+
+    <div class="form-buttons filter-actions actions" data-hook="buttons">
+      <%= button Spree.t(:add_all) %>
+      <%= link_to Spree.t('actions.cancel'), collection_url, class: 'button' %>
+    </div>
+  </fieldset>
+<% end %>

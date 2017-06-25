@@ -1,0 +1,33 @@
+<% admin_breadcrumb(link_to plural_resource_name(Spree::EbayStore), spree.admin_ebay_stores_path) %>
+
+<%= render :partial => 'spree/shared/error_messages', :locals => { :target => @ebay_store } %>
+
+<%= form_for [:admin, @ebay_store], method: :post,
+    url: admin_ebay_stores_path,
+    html: { :multipart => true } do |f| %>
+  <fieldset data-hook="new_ebay_store">
+
+    <legend align="center"><%= Spree.t(:new_ebay_store) %></legend>
+
+    <%= f.field_container :name do %>
+      <%= f.label :name, class: 'required' %><br />
+      <%= f.text_field :name, :class => 'fullwidth title', :required => true %>
+      <%= f.error_message_on :name %>
+    <% end %>
+
+    <%= f.field_container :code do %>
+      <%= f.label :code, class: 'required' %><br />
+      <%= f.text_field :code, :class => 'fullwidth title', :required => true %>
+      <%= f.error_message_on :code %>
+    <% end %>
+
+    <%= f.field_container :url do %>
+      <%= f.label :url, class: 'required' %><br />
+      <%= f.text_field :url, :class => 'fullwidth title', :required => true %>
+      <%= f.error_message_on :url %>
+    <% end %>
+
+    <%= render :partial => 'spree/admin/shared/new_resource_links' %>
+
+  </fieldset>
+<% end %>

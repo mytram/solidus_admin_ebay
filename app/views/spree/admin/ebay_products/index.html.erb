@@ -1,0 +1,119 @@
+<% admin_layout "full-width" %>
+
+<% admin_breadcrumb(plural_resource_name(Spree::EbayProduct)) %>
+
+<% content_for :page_actions do %>
+  <li id="new_ebay_product_link">
+    <%= button_link_to Spree.t(:new_ebay_product), new_object_url %>
+  </li>
+<% end if can?(:create, Spree::EbayProduct) %>
+
+
+<% content_for :table_filter_title do %>
+  <%= Spree.t(:search) %>
+<% end %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_ebay_products_sidebar">
+    <%= search_form_for [:admin, @search] do |f| %>
+      <%- locals = {f: f} %>
+      <div class="row" data-hook="admin_ebay_products_index_search" >
+        <div class="col-6">
+          <div class="field">
+            <%= f.label :product_name_cont, Spree::Product.human_attribute_name(:product_name) %>
+            <%= f.text_field :product_name_cont, size: 15 %>
+          </div>
+        </div>
+
+        <div class="col-4">
+          <div class="field">
+            <%= f.label :ebay_store_id_eq, Spree::EbayStore.human_attribute_name(:ebay_store_name) %>
+            <%= f.select :ebay_store_id_eq, Spree::EbayStore.all.collect {|s| [s.name, s.id]},
+                         {include_blank: true}, class: 'select2 fullwidth' %>
+          </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="field">
+            <%= f.label :ebay_id, Spree::EbayStore.human_attribute_name(:ebay_id) %>
+            <%= f.text_field :ebay_id_cont, size: 15 %>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions filter-actions" data-hook="admin_products_index_search_buttons">
+        <%= button Spree.t(:search) %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= paginate @collection, theme: "solidus_admin" %>
+
+<% if @collection.any? %>
+  <table class="index" id="listing_ebay_products">
+    <colgroup>
+      <col style="width: 10%;">
+      <col style="width: 25%;">
+      <col style="width: 10%;">
+      <col style="width: 10%;">
+      <col style="width: 15%;">
+      <col style="width: 20%;">
+    </colgroup>
+    <thead>
+      <tr data-hook="admin_ebay_products_index_headers">
+        <th><%= sort_link @search, :ebay_store_name, Spree::EbayStore.human_attribute_name(:ebay_store_id), { default_order: "desc" }, {title: 'admin_ebay_products_listing_ebay_store_name'} %></th>
+        <th colspan="2"><%= sort_link @search, :product_name, Spree::Product.human_attribute_name(:name), { default_order: "desc" }, {title: 'admin_ebay_products_listing_name_title'} %></th>
+        <th><%= sort_link @search, :ebay_id, Spree::EbayProduct.human_attribute_name(:ebay_id), { default_order: "desc" }, {title: 'admin_ebay_products_listing_ebay_id'} %></th>
+        <th><%= sort_link @search, :listed_at, Spree::EbayProduct.human_attribute_name(:listed_at), { default_order: "desc" }, {title: 'admin_ebay_products_listing_listed_at'} %></th>
+        <th data-hook="admin_ebay_products_index_header_actions" class="actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @collection.each do |ebay_product| %>
+        <tr id="<%= spree_dom_id ebay_product %>" data-hook="admin_ebay_products_index_rows" class="<%= cycle('odd', 'even') %>">
+          <td>
+            <%= link_to ebay_product.ebay_store.name, edit_admin_ebay_store_path(ebay_product.ebay_store) %>
+          </td>
+          <td>
+            <%= link_to ebay_product.product.name, edit_admin_product_path(ebay_product.product) %>
+          </td>
+          <td class="align-center">
+            <%= render 'spree/admin/shared/image', image: ebay_product.product.display_image, size: :mini %>
+          </td>
+          <td class="align-center">
+            <% if ebay_product.ebay_id %>
+              <%= link_to ebay_product.ebay_id, ebay_product.url, target: '_blank' %>
+            <% else %>
+              Publish
+            <% end %>
+          </td>
+          <td>
+            <%= pretty_time ebay_product.listed_at if ebay_product.listed_at %>
+          </td>
+          <td class="actions" data-hook="admin_ebay_products_index_row_actions">
+            <%= link_to_with_icon('eye', Spree.t(:ebay_listing_preview),
+                                  admin_ebay_listing_path(ebay_product.product.slug),
+                                  no_text: true, target: '_blank') if can?(:edit, ebay_product) %>
+            &nbsp;
+            <%= link_to_edit ebay_product, no_text: true, class: 'edit' if can?(:edit, ebay_product) %>
+            &nbsp;
+            <%= link_to_delete ebay_product, no_text: true if can?(:delete, ebay_product)%>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="col-9 no-objects-found">
+    <%= render 'spree/admin/ebay_products/add_all_products' %>
+    <%= render 'spree/admin/shared/no_objects_found',
+               resource: Spree::EbayProduct,
+               new_resource_url: new_object_url %>
+  </div>
+<% end %>
+
+<%= paginate @collection, theme: "solidus_admin" %>

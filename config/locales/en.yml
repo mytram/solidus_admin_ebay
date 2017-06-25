@@ -2,4 +2,17 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: Hello world
+  spree:
+    add_all: Add All
+    add_all_products_to_ebay_store: Add All Products to eBay Store
+    add_n_products_to_ebay_store: Added %{count} products to eBay store %{store}
+    admin:
+      tab:
+        ebay_store: 'eBay Store'
+        ebay_stores: 'eBay Stores'
+        ebay_products: 'eBay Products'
+    ebay_store_details: 'eBay Store Details'
+    ebay_store_not_found: 'eBay Store not found'
+    ebay_listing_preview: 'Ebay Listing Preview'
+    new_ebay_store: 'New eBay Store'
+    new_ebay_product: 'Add eBay Product'

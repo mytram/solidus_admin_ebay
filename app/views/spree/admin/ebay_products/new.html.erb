@@ -1,0 +1,30 @@
+<%= render :partial => 'spree/shared/error_messages', :locals => { :target => @ebay_product } %>
+
+<%= render 'spree/admin/ebay_products/add_all_products' %>
+
+<%= form_for [:admin, @ebay_product], method: :post, url: admin_ebay_products_path, :html => { :multipart => true } do |f| %>
+
+  <fieldset data-hook="new_product">
+
+    <legend align="center"><%= Spree.t(:new_ebay_product) %></legend>
+
+    <%= f.field_container :ebay_store_id do %>
+      <%= f.label :ebay_store_id, Spree::EbayStore.model_name.human, class: 'required' %>
+      <%= f.field_hint :ebay_store %><br />
+      <%= f.collection_select(:ebay_store_id, @ebay_stores, :id, :name, { :include_blank => Spree.t('match_choices.none') }, { :class => 'select2 fullwidth' }) %>
+      <%= f.error_message_on :ebay_store_id %>
+    <% end %>
+
+
+    <%= f.field_container :product_id do %>
+      <%= f.label :product_id, Spree::Product.model_name.human, class: 'required' %>
+      <%= f.field_hint :product %><br />
+      <%= f.collection_select(:product_id, @products, :id, :name, { :include_blank => Spree.t('match_choices.none') }, { :class => 'select2 fullwidth' }) %>
+      <%= f.error_message_on :product_id %>
+    <% end %>
+
+
+    <%= render :partial => 'spree/admin/shared/new_resource_links' %>
+
+  </fieldset>
+<% end %>
